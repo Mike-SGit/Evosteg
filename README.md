@@ -1,2 +1,2 @@
-# Evosteg
-Steganographic tool for COMP6441 that will evolve to evade some contemporary steganographic detection tools
+# steganographer
+Steganographic tool for pngs to hide and reveal text messages in images using least significant bit manipulation
