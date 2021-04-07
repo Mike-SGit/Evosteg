@@ -91,17 +91,37 @@ public class Steganographer {
         File f = new File(pngname);
 		try {
             BufferedImage inImage = ImageIO.read(f);
-        }
+        
         int found = 0;
         int finish = 0;
         String secret = "";
         int i = 0;
-        while(finish = 0){
-            for(i = 0; i < 8; i++){
-                
-            }
-        }
+        int x = 0;
+        int y = 0;
+        byte temp = 0x00;
+        System.out.println("temp is now: "+ temp);
 
+        while(finish == 0){
+            for(i = 0; i < 8; i++){
+                Color c = new Color(inImage.getRGB(x,y));
+                byte blue = (byte)c.getBlue();
+                System.out.println(blue);
+
+                blue = (byte)(blue & 0x01);
+                blue = (byte)(blue << (7-i));
+                temp = (byte)(temp | blue);
+                // temp = (byte)(temp | blue);
+                System.out.println("temp is now: "+ temp);
+
+                x++;
+            }
+            System.out.println(temp);
+            System.out.println(Byte.toString(temp));
+            return;
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
         return;
 
 
