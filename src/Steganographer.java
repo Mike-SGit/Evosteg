@@ -24,52 +24,57 @@ public class Steganographer {
         //convert string to array of bytes
         byte[] byteString = message.getBytes();
 
+        //100001
+        System.out.println(" byte 0: " + byteString[0]);
+        System.out.println(" byte 1: " + byteString[1]);
+        //1100001
+        System.out.println(" byte 2: " + byteString[2]);
+
+
         
 
         File f = new File(pngname);
 		try {
             BufferedImage inImage = ImageIO.read(f);
-
             int height = inImage.getHeight();
             int width = inImage.getWidth();
+            System.out.println("image height: "+height);
             int x = 0;
             int y = 0;
 
             int bitmask = 0x7F;
 
             for(byte charByte : byteString){
-                    //11111111
-                    //00000000
-                    //00000000
+
                 for(int i = 0; i < 8; i++){
+
+                    //100001
                     Color c = new Color(inImage.getRGB(x,y));
                     
                     int red = c.getRed();
                     int green = c.getGreen();
                     byte blue = (byte)c.getBlue();
 
-                    System.out.println("blue before : " + blue);
+                    System.out.println("blue was: " + blue);
 
-                    Byte temp = (byte)(charByte >> 7);
-                    System.out.println("charByte : " + charByte);
-                    System.out.println("temp : " + temp);
-                    //clear least significant bit by & 0xFE
+                    Byte temp = (byte)(charByte >> i);
+                    temp = (byte)(temp & 0x01);
                     blue = (byte)((blue & 0xFE)| temp);
-                    charByte = (byte)(charByte << 1);
-                    // System.out.println(blue);
+                    
+
                     System.out.println("setting blue to : " + blue);
                     Color newColor = new Color(red,green,blue);
 
                     inImage.setRGB(x,y,newColor.getRGB());
-                    y++;
-                    if(y == width){
-                        y = 0;
-                        x++;
+                    x++;
+                    if(x+1 == width){
+                        x = 0;
+                        y++;
                     }
                 }
             }
 
-            String outname = pngname + "Encoded";
+            String outname = "Encoded" + pngname;
             File outputfile = new File(outname);
             ImageIO.write(inImage, "png", outputfile);
 
@@ -83,10 +88,19 @@ public class Steganographer {
 
     public static void decode(String pngname) {
 
-        // File f = new File(pngname);
-		// try {
-        //     BufferedImage inImage = ImageIO.read(f);
-        // }
+        File f = new File(pngname);
+		try {
+            BufferedImage inImage = ImageIO.read(f);
+        }
+        int found = 0;
+        int finish = 0;
+        String secret = "";
+        int i = 0;
+        while(finish = 0){
+            for(i = 0; i < 8; i++){
+                
+            }
+        }
 
         return;
 

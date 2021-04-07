@@ -35,30 +35,38 @@ public class App {
             int x = 0;
             int y = 0;
 
+            int bitmask = 0x7F;
 
-            for(byte bit : byteString){
-                
+            for(byte charByte : byteString){
+                    //11111111
+                    //00000000
+                    //00000000
+                for(int i = 0; i < 8; i++){
                     Color c = new Color(inImage.getRGB(x,y));
                     
                     int red = c.getRed();
                     int green = c.getGreen();
                     byte blue = (byte)c.getBlue();
 
-                    System.out.println(bit);
-                    System.out.write(bit);
-
                     System.out.println("blue before : " + blue);
-                    
-                    blue = (byte)((blue & 0xFE)| bit);
-                    System.out.println(blue);
-                    Color newColor = new Color(red,
-                    green,blue);
+
+                    Byte temp = (byte)(charByte >> 7);
+                    System.out.println("charByte : " + charByte);
+                    System.out.println("temp : " + temp);
+                    //clear least significant bit by & 0xFE
+                    blue = (byte)((blue & 0xFE)| temp);
+                    charByte = (byte)(charByte << 1);
+                    // System.out.println(blue);
+                    System.out.println("setting blue to : " + blue);
+                    Color newColor = new Color(red,green,blue);
+
                     inImage.setRGB(x,y,newColor.getRGB());
                     y++;
                     if(y == width){
                         y = 0;
                         x++;
                     }
+                }
             }
 
             String outname = pngname + "Encoded";
@@ -116,3 +124,14 @@ public class App {
 
     }
 }
+
+
+
+//1110 
+//0001 
+//
+//0001  
+//1100
+
+//1010
+//
