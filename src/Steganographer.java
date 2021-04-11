@@ -105,10 +105,11 @@ public class Steganographer {
             for(i = 0; i < 8; i++){
                 Color c = new Color(inImage.getRGB(x,y));
                 byte blue = (byte)c.getBlue();
-                System.out.println(blue);
+                System.out.println("starting blue: "+ blue);
 
                 blue = (byte)(blue & 0x01);
                 blue = (byte)(blue << (7-i));
+                System.out.println("before binop blue: "+ blue);
                 temp = (byte)(temp | blue);
                 // temp = (byte)(temp | blue);
                 System.out.println("temp is now: "+ temp);
