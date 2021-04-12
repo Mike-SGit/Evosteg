@@ -38,7 +38,7 @@ public class Steganographer {
             BufferedImage inImage = ImageIO.read(f);
             int height = inImage.getHeight();
             int width = inImage.getWidth();
-            System.out.println("image height: "+height);
+            System.out.println("image height: " + height);
             int x = 0;
             int y = 0;
 
@@ -55,16 +55,20 @@ public class Steganographer {
                     int green = c.getGreen();
                     byte blue = (byte)c.getBlue();
 
-                    System.out.println("blue was: " + blue);
+                    // System.out.println("blue was: " + blue);
 
                     Byte temp = (byte)(charByte >> i);
                     temp = (byte)(temp & 0x01);
                     blue = (byte)((blue & 0xFE)| temp);
                     
 
-                    System.out.println("setting blue to : " + blue);
+                    // System.out.println("setting blue to : " + blue);
                     Color newColor = new Color(red,green,blue);
-
+                    if (blue == 76){
+                        System.out.print("0");
+                    } else {
+                        System.out.print("1");
+                    }
                     inImage.setRGB(x,y,newColor.getRGB());
                     x++;
                     if(x+1 == width){
@@ -88,42 +92,60 @@ public class Steganographer {
 
     public static void decode(String pngname) {
 
+
+        String secret = "";
         File f = new File(pngname);
 		try {
             BufferedImage inImage = ImageIO.read(f);
+            int height = inImage.getHeight();
+            int width = inImage.getWidth();
         
         int found = 0;
         int finish = 0;
-        String secret = "";
+        // String secret = "";
         int i = 0;
         int x = 0;
         int y = 0;
         byte temp = 0x00;
-        System.out.println("temp is now: "+ temp);
+        byte temp2 = 0x00;
+        byte temp3 = 0x00;
+        byte temp4 = 0x00;
+        int prevchar = 0;
+        // System.out.println("temp is now: "+ temp);
 
         while(finish == 0){
             for(i = 0; i < 8; i++){
+                temp = (byte)(temp << 1);
                 Color c = new Color(inImage.getRGB(x,y));
                 byte blue = (byte)c.getBlue();
-                System.out.println("starting blue: "+ blue);
 
                 blue = (byte)(blue & 0x01);
-                blue = (byte)(blue << (7-i));
-                System.out.println("before binop blue: "+ blue);
+
                 temp = (byte)(temp | blue);
-                // temp = (byte)(temp | blue);
-                System.out.println("temp is now: "+ temp);
+                // System.out.println("after pass "+ i + "temp is now: "+ temp);
 
                 x++;
+                    if(x+1 == width){
+                        x = 0;
+                        y++;
+                    }
             }
-            System.out.println(temp);
-            System.out.println(Byte.toString(temp));
-            return;
+            
+            for(int j = 0; j < 8; j++){
+                temp2 = (byte)(temp2 << 1);
+                temp2 = (byte)(temp2 |(temp & 0x01));
+                temp = (byte)(temp >> 1);
+            }
+            if (prevchar == 33 && temp2 == 33 && x > 17) finish = 1;
+            prevchar = temp2;
+            if (temp2 != 33) secret = secret + Character.toString((char) temp2);
+
         }
     } catch (IOException e) {
         e.printStackTrace();
     }
-        return;
+    System.out.println(secret);
+    return;
 
 
     }
