@@ -5,11 +5,7 @@ import java.util.*;
 import java.nio.charset.Charset;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-
-// import jdk.internal.org.jline.reader.Widget;
-
 import java.awt.*;
-
 
 public class Steganographer {
 
@@ -20,7 +16,6 @@ public class Steganographer {
         String message = input.nextLine();  
         message = "!!" + message + "!!";
 
-
         //convert string to array of bytes
         byte[] byteString = message.getBytes();
 
@@ -30,8 +25,6 @@ public class Steganographer {
         //1100001
         System.out.println(" byte 2: " + byteString[2]);
 
-
-        
 
         File f = new File(pngname);
 		try {
@@ -45,17 +38,12 @@ public class Steganographer {
             int bitmask = 0x7F;
 
             for(byte charByte : byteString){
-
                 for(int i = 0; i < 8; i++){
-
                     //100001
                     Color c = new Color(inImage.getRGB(x,y));
-                    
                     int red = c.getRed();
                     int green = c.getGreen();
                     byte blue = (byte)c.getBlue();
-
-                    // System.out.println("blue was: " + blue);
 
                     Byte temp = (byte)(charByte >> i);
                     temp = (byte)(temp & 0x01);
@@ -86,8 +74,6 @@ public class Steganographer {
                 e.printStackTrace();
             }
 
-            
-
     }
 
     public static void decode(String pngname) {
@@ -102,7 +88,6 @@ public class Steganographer {
         
         int found = 0;
         int finish = 0;
-        // String secret = "";
         int i = 0;
         int x = 0;
         int y = 0;
